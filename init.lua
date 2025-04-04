@@ -276,6 +276,103 @@ require('lazy').setup({
     },
   },
 
+  {
+    'tpope/vim-fugitive',
+    lazy = false,
+    -- cmd = { "Git", "Gdiffsplit", "Gread", "Gwrite", "Ggrep", "GMove", "GDelete", "GBrowse", "GRemove", "GRename" },
+    -- ft = { "fugitive", "gitcommit", "gitrebase" },
+    setup = function()
+      vim.g.fugitive_git_executable = 'git'
+    end,
+    config = function() end,
+  },
+
+  -- {
+  --   'numToStr/Comment.nvim',
+  --   keys = {
+  --     { 'gcc', mode = 'n', desc = 'Comment toggle current line' },
+  --     { 'gc', mode = { 'n', 'o' }, desc = 'Comment toggle linewise' },
+  --     { 'gc', mode = 'x', desc = 'Comment toggle linewise (visual)' },
+  --     { 'gbc', mode = 'n', desc = 'Comment toggle current block' },
+  --     { 'gb', mode = { 'n', 'o' }, desc = 'Comment toggle blockwise' },
+  --     { 'gb', mode = 'x', desc = 'Comment toggle blockwise (visual)' },
+  --   },
+  --   opts = function()
+  --     return {
+  --       pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+  --     }
+  --   end,
+  --   init = function()
+  --     require('core.utils').load_mappings 'comment'
+  --   end,
+  --   config = function(_, opts)
+  --     require('Comment').setup(opts)
+  --   end,
+  --   dependencies = {
+  --     'JoosepAlviste/nvim-ts-context-commentstring',
+  --   },
+  -- },
+
+  {
+    'nvim-neorg/neorg',
+    dependencies = { 'luarocks.nvim' },
+    lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
+    version = '*', -- Pin Neorg to the latest stable release
+    config = true,
+  },
+
+  {
+    event = 'BufRead',
+    'https://gitlab.com/HiPhish/rainbow-delimiters.nvim',
+    config = function()
+      local rainbow_delimiters = require 'rainbow-delimiters'
+      vim.g.rainbow_delimiters = {
+        strategy = {
+          [''] = rainbow_delimiters.strategy['global'],
+          vim = rainbow_delimiters.strategy['local'],
+        },
+        query = {
+          [''] = 'rainbow-delimiters',
+          lua = 'rainbow-blocks',
+        },
+        highlight = {
+          'RainbowDelimiterRed',
+          'RainbowDelimiterYellow',
+          'RainbowDelimiterBlue',
+          'RainbowDelimiterOrange',
+          'RainbowDelimiterGreen',
+          'RainbowDelimiterViolet',
+          'RainbowDelimiterCyan',
+        },
+      }
+    end,
+  },
+
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      local harpoon = require("harpoon")
+
+      -- REQUIRED
+      harpoon:setup()
+      -- REQUIRED
+
+      vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
+      vim.keymap.set("n", "<C-q>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+
+      vim.keymap.set("n", "<C-h>", function() harpoon:list():select(1) end)
+      vim.keymap.set("n", "<C-t>", function() harpoon:list():select(2) end)
+      vim.keymap.set("n", "<C-n>", function() harpoon:list():select(3) end)
+      vim.keymap.set("n", "<C-s>", function() harpoon:list():select(4) end)
+
+      -- Toggle previous & next buffers stored within Harpoon list
+      vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
+      vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)
+    end
+  },
+
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
